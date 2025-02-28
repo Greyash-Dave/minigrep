@@ -1,168 +1,189 @@
-# minigrep
+# Minigrep
 
-A lightweight and efficient grep-like command-line utility written in Rust that allows you to search for text patterns in files.
+A powerful grep-like command-line utility written in Rust that allows you to search for text patterns within files. This tool was created as a learning project to understand Rust concepts including file I/O, error handling, and command-line argument parsing.
 
 ## Features
 
-- **Fast text search** - Built with Rust for optimal performance
-- **Multiple search modes**:
-  - Standard case-sensitive search (`-d`)
-  - Case-insensitive search (`-i`)
-  - Count occurrences mode (`-n`)
-- **Simple and intuitive interface** - Designed for ease of use
-- **Minimal dependencies** - Self-contained with no external requirements
+### Core Functionality
+- **Pattern Searching**: Find lines containing specified text patterns
+- **Line-by-line Results**: Display matching lines with line numbers
+- **Highlighting**: Colorize matching patterns within results for better visibility
+- **Count Mode**: Option to only show the number of matches rather than the actual content
 
-## Installation
+### Search Options
+- **Case Sensitivity**: Choose between case-sensitive (default) or case-insensitive searching
+- **Inverted Matching**: Find lines that do NOT contain the specified pattern
+- **Configurable via Environment**: Set default behavior using environment variables
 
-### Prerequisites
+### Output Customization
+- **Colorized Output**: Highlight matches in different colors
+- **Color Mode Control**: Configure when colors should be used (always, auto, or never)
+- **Highlight Color Selection**: Choose from six different highlight colors
 
-- [Rust](https://www.rust-lang.org/tools/install) (1.58.0 or higher)
-- Git
+## Building the Project
 
-### Direct installation from GitHub
-
-Install directly using Cargo:
-
-```bash
-cargo install --git https://github.com/yourusername/minigrep.git
-```
-
-This command will:
-1. Clone the repository
-2. Compile the source code
-3. Install the binary to your Cargo bin directory (typically `~/.cargo/bin/`)
-4. Make it available in your PATH
-
-### Alternative: Manual installation
-
-If you prefer to examine the code before installing:
+Since this is a learning project, you'll need to build it locally:
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/minigrep.git
+# Clone the repository (if you've pushed it to GitHub)
+git clone https://github.com/Greyash-Dave/minigrep.git
 
-# Navigate to the project directory
-cd minigrep
+# Or simply navigate to your project directory
+cd path/to/minigrep
 
-# Build and install
-cargo install --path .
-```
+# Build the project
+cargo build
 
-### Verifying installation
+# Run in debug mode
+cargo run -- [OPTIONS] PATTERN FILENAME
 
-After installation, verify that minigrep is properly installed:
+# Build in release mode for better performance
+cargo build --release
 
-```bash
-minigrep --version
+# Run the release version
+./target/release/minigrep [OPTIONS] PATTERN FILENAME
 ```
 
 ## Usage
 
-### Basic syntax
+The basic syntax for Minigrep is:
 
-```
-minigrep [MODE] QUERY FILENAME
+```bash
+minigrep [OPTIONS] PATTERN FILENAME
 ```
 
 Where:
-- `MODE` (optional): Specifies the search mode (`-d`, `-i`, or `-n`)
-- `QUERY`: The text pattern to search for
-- `FILENAME`: The file to search in
+- `OPTIONS`: Optional flags to modify search behavior
+- `PATTERN`: The text pattern you want to search for
+- `FILENAME`: The path to the file you want to search within
 
-### Search modes
+### Command-line Options
 
-#### Default mode: Case-sensitive search (`-d`)
+| Option | Description |
+|--------|-------------|
+| `-i` | Case-insensitive search (ignore letter case when matching) |
+| `-v` | Invert match (show only lines that do NOT contain the pattern) |
+| `-n` | Count-only mode (display only the number of matching lines) |
+| `--color=MODE` | Control when to use colored output. MODE can be: |
+|  | • `always`: Always use colors, even when output is redirected |
+|  | • `auto`: Use colors only when outputting directly to a terminal (default) |
+|  | • `never`: Never use colors in the output |
+| `--highlight=COLOR` | Set the highlight color for matches. COLOR can be one of: |
+|  | • `red` (default) |
+|  | • `green` |
+|  | • `yellow` |
+|  | • `blue` |
+|  | • `magenta` |
+|  | • `cyan` |
 
-Finds exact matches for the query string:
+### Environment Variables
 
+- `CASE_INSENSITIVE`: When set to any value, makes all searches case-insensitive by default (same as using the `-i` flag)
+
+## Examples
+
+### Basic Searching
+
+Search for the word "function" in a file:
 ```bash
-minigrep "Rust" example.txt
-# OR explicitly specify default mode
-minigrep -d "Rust" example.txt
+cargo run -- function main.rs
 ```
 
-#### Case-insensitive search (`-i`)
-
-Finds matches regardless of case:
-
+Or if using the built binary:
 ```bash
-minigrep -i "rust" example.txt
-# Will match "Rust", "rust", "RUST", etc.
+./target/release/minigrep function main.rs
 ```
 
-#### Count occurrences mode (`-n`)
+Output will show each line containing "function" with line numbers and highlighted matches.
 
-Counts how many times the pattern appears instead of printing matches:
+### Case-Insensitive Search
 
+Search for "error" ignoring case (will match "Error", "ERROR", etc.):
 ```bash
-minigrep -n "Rust" example.txt
-# Output: Found 5 occurrences of 'Rust'
+cargo run -- -i error log.txt
 ```
 
-### Examples
+### Finding Lines That Don't Match
 
-Searching for lines containing "error" in a log file:
+Find all lines that don't contain the word "warning":
 ```bash
-minigrep "error" application.log
+cargo run -- -v warning log.txt
 ```
 
-Finding all mentions of "API" regardless of case in a documentation file:
+### Counting Matches
+
+Count how many lines contain "TODO" comments:
 ```bash
-minigrep -i "api" documentation.md
+cargo run -- -n "TODO" project.rs
 ```
 
-Counting how many times "TODO" appears in a source file:
+### Customizing Output Colors
+
+Search using cyan highlighting instead of the default red:
 ```bash
-minigrep -n "TODO" src/main.rs
+cargo run -- --highlight=cyan "important" document.txt
 ```
 
-## Error Handling
+### Combining Multiple Options
 
-minigrep provides clear error messages in the following scenarios:
+Case-insensitive search with yellow highlighting, showing only the count:
+```bash
+cargo run -- -i -n --highlight=yellow "deprecated" legacy.rs
+```
 
-- Insufficient arguments:
-  ```
-  Problem parsing arguments: not enough arguments
-  ```
+### Redirecting Output Without Colors
 
-- Invalid mode argument:
-  ```
-  Problem parsing arguments: invalid mode argument
-  ```
+Force color output off when redirecting to a file:
+```bash
+./target/release/minigrep --color=never "data" large_file.txt > results.txt
+```
 
-- File not found:
-  ```
-  No such file or directory (os error 2)
-  ```
+## How It Works
+
+Minigrep reads the specified file and processes it line by line. For each line, it:
+
+1. Checks if the line contains the search pattern (considering case-sensitivity settings)
+2. For normal search mode: Collects matching lines, their line numbers, and the positions of matches within each line
+3. For inverted search: Collects non-matching lines
+4. For count-only mode: Simply counts matching or non-matching lines
+
+The output is then formatted according to the specified options, with optional colorization of matches to make them stand out.
+
+## Concepts Learned
+
+This project demonstrates several important Rust concepts:
+
+- **Error Handling**: Using Result types to handle potential errors
+- **Modules and Organization**: Separating code into library and binary crates
+- **Command-Line Parsing**: Processing user input from the command line
+- **File I/O**: Reading from files and handling related errors
+- **Enums and Pattern Matching**: Using Rust's powerful enum system for options
+- **Testing**: Writing unit tests to ensure code functionality
+- **String Manipulation**: Working with string and text processing
+- **Environment Variables**: Integrating with system environment
+- **ANSI Terminal Codes**: Implementing colorized terminal output
+
+## Performance Considerations
+
+- Minigrep loads the entire file into memory, so extremely large files might cause memory issues
+- The search algorithm uses Rust's standard string matching, which is efficient for most use cases
+- Color processing adds minimal overhead and can be disabled for maximum performance
 
 ## Project Structure
 
-```
-minigrep/
-├── src/
-│   ├── main.rs      # Command-line interface and argument parsing
-│   └── lib.rs       # Core functionality and search algorithms
-├── Cargo.toml       # Project configuration and dependencies
-└── README.md        # Documentation
-```
+- `src/lib.rs`: Contains the core functionality and search algorithms
+- `src/main.rs`: Handles command-line argument parsing and program execution
 
-## Development
+## Future Improvements
 
-### Running tests
+Some potential enhancements if you continue working on this project:
 
-```bash
-cargo test
-```
+- Add support for regular expressions
+- Implement recursive directory search
+- Add context lines (showing lines before and after matches)
+- Support for reading from standard input
+- Implement multi-threading for large files
 
-### Building locally
+## Author
 
-```bash
-cargo build --release
-```
-
-The compiled binary will be available at `./target/release/minigrep`.
-
-## Acknowledgments
-
-- Inspired by the grep utility and the Rust Programming Language book project
-- Built with Rust 🦀
+Gresham Dave C <greyashdave@gmail.com>
