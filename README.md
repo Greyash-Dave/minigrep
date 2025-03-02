@@ -2,6 +2,10 @@
 
 A powerful grep-like command-line utility written in Rust that allows you to search for text patterns within files. This tool was created as a learning project to understand Rust concepts including file I/O, error handling, and command-line argument parsing.
 
+<a href="https://youtu.be/HpiWo6qQY3o">
+  <img src="https://img.youtube.com/vi/OO9dnwtZrN4/0.jpg" alt="Watch the video">
+</a> 
+
 ## Features
 
 ### Core Functionality
