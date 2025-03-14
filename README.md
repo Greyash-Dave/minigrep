@@ -193,8 +193,3 @@ Some potential enhancements if you continue working on this project:
 - Add context lines (showing lines before and after matches)
 - Support for reading from standard input
 - Implement multi-threading for large files
-
-## Author
-
-Gresham Dave
-<greyashdave@gmail.com>
