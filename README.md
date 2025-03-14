@@ -6,7 +6,11 @@ A powerful grep-like command-line utility written in Rust that allows you to sea
   <img src="https://img.youtube.com/vi/Br-xK8r5UQ0/0.jpg" alt="Watch the video" width="100%">
 </a> 
 
-🔗 [Watch the video on YouTube](https://www.youtube.com/watch?v=Br-xK8r5UQ0) 
+<hr>
+  <a href="https://youtu.be/Br-xK8r5UQ0">
+    🔗 Watch the video on YouTube
+  </a>
+<hr>
 
 ## Features
 
